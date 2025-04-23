@@ -17,8 +17,15 @@ def encrypt(message, key):
     for message_char, key_char in zip(message, key):
         message_code = char_to_code(message_char)
         key_code = char_to_code(key_char)
-        encrypted_code = (message_code + key_code) % 27
+        if ((message_code + key_code)>26):
+            encrypted_code = (message_code + key_code) % 27
+        else:
+            encrypted_code = (message_code + key_code)
         encrypted_char = code_to_char(encrypted_code)
         encrypted.append(encrypted_char)
 
     return ''.join(encrypted)
+
+message = "helloworld"
+key = "abcdefgijkl"
+print(encrypt(message, key))
