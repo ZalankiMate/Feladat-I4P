@@ -13,7 +13,7 @@ def encrypt(message, key):
         raise ValueError("The key is only allowed to contain lowercase letters of the english alphabet and space")
     if not message_check(message):
         raise ValueError("The message is only allowed to contain lowercase letters of the english alphabet and space")
-    if len(key) < len(message):
+    if not length_check(key, message):
         raise ValueError("The key can't be shorter than the message.")
 
     encrypted = []
@@ -31,6 +31,23 @@ def encrypt(message, key):
 
     return ''.join(encrypted)
 
+def decrypt(encryptedtext, key):
+
+    decrypted = []
+
+    for encryptedtext_char, key_char in zip(encryptedtext, key):
+        encryptedtext_code = char_to_code(encryptedtext_char)
+        key_code = char_to_code(key_char)
+        code_diff = encryptedtext_code - key_code
+        if (code_diff<0):
+            decrypted_code = code_diff % 27
+        else:
+            decrypted_code = code_diff
+        decrypted_char = code_to_char(decrypted_code)
+        decrypted.append(decrypted_char)
+
+    return ''.join(decrypted)
+
 def message_check(message):
     allowed_chars = set("abcdefghijklmnopqrstuvwxyz ")
     for character in message:
@@ -45,6 +62,18 @@ def key_check(key):
             return False
     return True
 
+def length_check(key, message):
+    if len(key) < len(message):
+        return False
+    return True
+
+def encrypt_length_check(key, encryptedtext):
+    if len(key) < len(encryptedtext):
+        return False
+    return True
+
 message = "helloworld"
 key = "abcdefgijkl"
+encryptedtext = encrypt(message, key)
 print(encrypt(message, key))
+print(decrypt(encryptedtext, key))
